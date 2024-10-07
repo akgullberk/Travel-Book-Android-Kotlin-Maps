@@ -41,8 +41,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
 
         // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        val eiffel = LatLng(48.85391,2.2913515)
+        mMap.addMarker(MarkerOptions().position(eiffel).title("Eiffel Tower"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(eiffel,16f))
     }
 }
