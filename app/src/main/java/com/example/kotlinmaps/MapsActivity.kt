@@ -1,5 +1,8 @@
 package com.example.kotlinmaps
 
+import android.health.connect.datatypes.ExerciseRoute.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
@@ -15,6 +18,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
+    private lateinit var locationManager : LocationManager
+    private lateinit var locationListener: LocationListener
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,9 +46,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
-        val eiffel = LatLng(48.85391,2.2913515)
-        mMap.addMarker(MarkerOptions().position(eiffel).title("Eiffel Tower"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(eiffel,16f))
+       locationManager = this.getSystemService(LOCATION_SERVICE) as LocationManager
+
+        locationListener = object : LocationListener{
+            override fun onLocationChanged(location: android.location.Location) {
+
+            }
+
+        }
+
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0f,locationListener)
+
+
     }
 }
