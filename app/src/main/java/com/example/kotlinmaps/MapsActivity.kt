@@ -31,6 +31,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var permissionLauncher : ActivityResultLauncher<String>
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -61,7 +62,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         locationListener = object : LocationListener{
             override fun onLocationChanged(location: android.location.Location) {
-                println("location: " + location.toString())
+                val userLocation = LatLng(location.latitude,location.longitude)
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,15f))
             }
 
         }
@@ -77,6 +79,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         }else{
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0f,locationListener)
+            val lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            if(lastLocation != null){
+                val lastUserLocation = LatLng(lastLocation.latitude,lastLocation.longitude)
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation,15f))
+            }
 
         }
 
@@ -90,11 +97,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             if(result){
                 if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0f,locationListener)
+                    val lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                    if(lastLocation != null){
+                        val lastUserLocation = LatLng(lastLocation.latitude,lastLocation.longitude)
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation,15f))
+                    }
 
                 }
 
             }else{
                 Toast.makeText(this@MapsActivity,"Permission needed!",Toast.LENGTH_LONG).show()
+
             }
 
 
