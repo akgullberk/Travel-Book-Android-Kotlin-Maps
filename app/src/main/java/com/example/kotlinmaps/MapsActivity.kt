@@ -1,6 +1,7 @@
 package com.example.kotlinmaps
 
 import android.Manifest
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.health.connect.datatypes.ExerciseRoute.Location
 import android.location.LocationListener
@@ -29,6 +30,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var locationManager : LocationManager
     private lateinit var locationListener: LocationListener
     private lateinit var permissionLauncher : ActivityResultLauncher<String>
+    private lateinit var sharedPreferences: SharedPreferences
+    private var trackBoolean : Boolean? = null
 
 
 
@@ -44,6 +47,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
 
         registerLauncher()
+
+        sharedPreferences = this.getSharedPreferences("com.example.kotlinmaps", MODE_PRIVATE)
+        trackBoolean = false
     }
 
     /**
@@ -62,8 +68,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         locationListener = object : LocationListener{
             override fun onLocationChanged(location: android.location.Location) {
-                val userLocation = LatLng(location.latitude,location.longitude)
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,15f))
+                trackBoolean = sharedPreferences.getBoolean("trackBoolean",false)
+                if(!trackBoolean!!){
+                    val userLocation = LatLng(location.latitude,location.longitude)
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,15f))
+                    sharedPreferences.edit().putBoolean("trackBoolean",true).apply()
+                }
             }
 
         }
@@ -84,6 +94,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 val lastUserLocation = LatLng(lastLocation.latitude,lastLocation.longitude)
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation,15f))
             }
+
+            mMap.isMyLocationEnabled = true
 
         }
 
