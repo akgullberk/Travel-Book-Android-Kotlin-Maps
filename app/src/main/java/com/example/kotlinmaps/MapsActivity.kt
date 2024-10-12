@@ -23,7 +23,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.example.kotlinmaps.databinding.ActivityMapsBinding
 import com.google.android.material.snackbar.Snackbar
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnMapLongClickListener {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
@@ -32,6 +32,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var permissionLauncher : ActivityResultLauncher<String>
     private lateinit var sharedPreferences: SharedPreferences
     private var trackBoolean : Boolean? = null
+    private var selectedLatitude : Double? = null
+    private var selectedLongitude : Double? = null
+
+
 
 
 
@@ -63,6 +67,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        mMap.setOnMapLongClickListener(this)
 
        locationManager = this.getSystemService(LOCATION_SERVICE) as LocationManager
 
@@ -124,6 +129,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
         }
+
+    }
+
+    override fun onMapLongClick(p0: LatLng) {
+        mMap.clear()
+
+        mMap.addMarker(MarkerOptions().position(p0))
+
+        selectedLatitude = p0.latitude
+        selectedLongitude = p0.longitude
 
     }
 }
