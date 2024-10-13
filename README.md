@@ -4,7 +4,7 @@ TRAVEL BOOK
 
 ## Description
 
-Pinpoint is an Android application that allows users to save, view, and manage their locations. 
+TRAVEL BOOK is an Android application that allows users to save, view, and manage their locations. 
 The app helps users mark their favorite spots on a map, store details about these locations, and easily return to them when needed. 
 It uses an SQLite database to store location information and offers a user-friendly interface.
 
